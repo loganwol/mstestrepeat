@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <ItemGroup Label="Code Analysis">
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(IsTestProject)' == 'false'">
+    <GlobalAnalyzerConfigFiles Include="CodeAnalysis.globalconfig"/>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(IsTestProject)' == 'true'">
+    <GlobalAnalyzerConfigFiles Include="CodeAnalysis.Test.globalconfig"/>
+  </ItemGroup>
+  
+</Project>
