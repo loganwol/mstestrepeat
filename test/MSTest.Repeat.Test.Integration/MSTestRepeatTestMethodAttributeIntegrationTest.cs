@@ -79,7 +79,13 @@
         {
             // Verify
             var val = File.ReadAllText("runcounter.log");
-            val.Should().Be("12345");
+            string expectedvalue = string.Empty;
+            for (int i = 0; i < targetrepeatcount; i++)
+            {
+                expectedvalue += (i + 1).ToString();
+            }
+
+            val.Should().Be(expectedvalue);
             RepeatTestMethodAttribute.CurrentIteration.Should().Be(targetrepeatcount);
         }
     }
