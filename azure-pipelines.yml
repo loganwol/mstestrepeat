@@ -43,7 +43,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: test
-    projects: '**/test/*Test.Unit.csproj'
+    projects: '**/*Test.Unit.csproj'
     publishTestResults: true
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings:CodeCoverage.runsettings'
   displayName: 'Run unit tests'
