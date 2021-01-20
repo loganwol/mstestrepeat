@@ -47,3 +47,9 @@ steps:
     publishTestResults: true
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings:CodeCoverage.runsettings'
   displayName: 'Run unit tests'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '.\Bin\Release\AnyCPU'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
