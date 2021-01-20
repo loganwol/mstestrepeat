@@ -3,13 +3,6 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
-pr:
-  branches:
-    include:
-      - personal
-    exclude:
-      - main
-
 pool:
   vmImage: 'windows-latest'
 
