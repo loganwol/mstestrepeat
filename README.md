@@ -54,9 +54,16 @@ Open a a command line window and run the following command
 where n is an integer value representing the number of iterations you want to run tests on. 
 
 
-## Benefit
-Many take the approach of running a test multiple times by making a copy of an existing test and putting it in a for loop. In some cases that might be ok, but look closely at your test implementation. Do you have a TestInitialize or ClassInitialize implementation and possibly a corresponding Cleanup implementation as well. If yes then using the Attribute is a more accurate representation of how the code should function than the test would behave under a simple loop. In the simple loop implementation, the initialization and cleanup only happens once with the loop happening n times, when we want to be testing the initialization, the functionality and the cleanup all in a loop.
+## Benefits
+
+### Accurate
+Many take the approach of running a test multiple times by making a copy of an existing test and putting it in a for loop. In some cases that might be ok, but look closely at your test implementation. In my team as we are testing with Hardware, we need to run integration tests against the actual hardware. Our tests have a TestInitialize or ClassInitialize implementation and a corresponding Cleanup implementation as well, to dereference instances to certain services meant for communicating with the underlying Hardware. In this case I found, using the Attribute was a more accurate representation of how the code should function than the test would behave under a simple loop. In the simple loop implementation, the initialization and cleanup only happens once with the loop happening n times, when we want to be testing the initialization, the functionality and the cleanup all in a loop.
 I ran into a couple of cases at work where teams used the simple loop approach and didn't catch any problems but switching to the attribute method, caught long standing stress problems right away.
+
+### Integration with Azure
+When tests are executed in Azure pipelines with the MSTest.Repeat attribute, all the test results are published back into Azure with the accurate iteration count. This aids in test run analysis and can further be used in creating custom reporting, example track MTTF for a test. Here's a screenshot of how the tests are recorded and reported in Azure.
+
+![Tests executed with MSTest.Repeat](docs/AzTestResults.png)
 
 ### References
 * [Xunit.Repeat in Nuget](https://github.com/MarcolinoPT/Xunit.Repeat). Code was borrowed from here adding the variation of reading from Enviornment variable as customization.
