@@ -11,6 +11,10 @@
     <NeutralLanguage>English</NeutralLanguage>
     <OutputPath>$(SolutionDir)publish\bin\$(Configuration)\$(Platform)\$(AssemblyName)</OutputPath>
     <IsTestProject>false</IsTestProject>
+    <PackageId>MSTestRepeat</PackageId>
+    <RepositoryUrl>https://github.com/loganwol/mstestrepeat/</RepositoryUrl>
+    <PackageProjectUrl>https://www.nuget.org/packages/MSTestRepeat/</PackageProjectUrl>
+    <Description>Enable existing tests to run in a loop without writing a for loop.</Description>
   </PropertyGroup>
 
   <ItemGroup>

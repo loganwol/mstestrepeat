@@ -1,4 +1,8 @@
-﻿namespace MSTest.RepeatAttributes.Test.Unit
+﻿// <copyright file="RepeatTestMethodInitializationTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace MSTest.RepeatAttributes.Test.Unit
 {
     using System;
     using System.Diagnostics.CodeAnalysis;

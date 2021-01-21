@@ -10,6 +10,13 @@
     <OutputPath>$(SolutionDir)bin\$(Configuration)\$(Platform)\$(AssemblyName)</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <BuildNumber Condition="'$(BUILD_BUILDNUMBER)' != ''">$(BUILD_BUILDNUMBER)</BuildNumber>
+    <BuildNumber Condition="'$(BUILD_BUILDNUMBER)' == ''">1.0.1</BuildNumber>
+
+    <AssemblyVersion>$(BuildNumber)</AssemblyVersion>
+  </PropertyGroup>
+
   <ImportGroup>
     <Import Project="$(SolutionDir)shared/code-analysis.props"/>
   </ImportGroup>

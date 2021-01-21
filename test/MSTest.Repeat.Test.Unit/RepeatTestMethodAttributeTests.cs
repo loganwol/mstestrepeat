@@ -1,3 +1,7 @@
+// <copyright file="RepeatTestMethodAttributeTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace MSTest.RepeatAttributes.Test.Unit
 {
     using System;
@@ -36,8 +40,10 @@ namespace MSTest.RepeatAttributes.Test.Unit
         public void DisplayName_for_test_result_is_not_modified_if_run_count_is_1()
         {
             // Arrange
-            TestResult testResult = new TestResult();
-            testResult.Outcome = UnitTestOutcome.Passed;
+            TestResult testResult = new TestResult
+            {
+                Outcome = UnitTestOutcome.Passed,
+            };
 
             RepeatTestMethodAttribute repeat = new RepeatTestMethodAttribute();
             var testMethodFake = Substitute.For<ITestMethod>();
@@ -55,8 +61,10 @@ namespace MSTest.RepeatAttributes.Test.Unit
             // Arrange
             Environment.SetEnvironmentVariable("NumberofIterations", "10", EnvironmentVariableTarget.User);
 
-            TestResult testResult = new TestResult();
-            testResult.Outcome = UnitTestOutcome.Passed;
+            TestResult testResult = new TestResult
+            {
+                Outcome = UnitTestOutcome.Passed,
+            };
 
             RepeatTestMethodAttribute repeat = new RepeatTestMethodAttribute();
             var testMethodFake = Substitute.For<ITestMethod>();
@@ -77,8 +85,10 @@ namespace MSTest.RepeatAttributes.Test.Unit
             // Arrange
             Environment.SetEnvironmentVariable("NumberofIterations", "-1", EnvironmentVariableTarget.User);
 
-            TestResult testResult = new TestResult();
-            testResult.Outcome = UnitTestOutcome.Passed;
+            TestResult testResult = new TestResult
+            {
+                Outcome = UnitTestOutcome.Passed,
+            };
 
             RepeatTestMethodAttribute repeat = new RepeatTestMethodAttribute();
             var testMethodFake = Substitute.For<ITestMethod>();
