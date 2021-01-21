@@ -1,4 +1,8 @@
-﻿namespace MSTest.RepeatAttributes.Test.Integration
+﻿// <copyright file="MSTestRepeatTestMethodAttributeIntegrationTest.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace MSTest.RepeatAttributes.Test.Integration
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -23,14 +27,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MSTestRepeatTestMethodAttributeIntegrationTest"/> class.
         /// </summary>
+        /// <param name="context">The test context of the current unit test execution.</param>
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
             _ = context;
 
             string numiterations = Environment.GetEnvironmentVariable("NumberofIterations", EnvironmentVariableTarget.User);
-            int repeatcount;
-            if (int.TryParse(numiterations, out repeatcount))
+            if (int.TryParse(numiterations, out int repeatcount))
             {
                 targetrepeatcount = repeatcount;
             }
@@ -41,6 +45,9 @@
             }
         }
 
+        /// <summary>
+        /// Ensure the environment variable is reset and the log file deleted for the next execution instance.
+        /// </summary>
         [ClassCleanup]
         public static void UnInitialize()
         {

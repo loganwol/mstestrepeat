@@ -1,3 +1,7 @@
+// <copyright file="RepeatTestMethodAttribute.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 /// <summary>
 /// Custom attribute defintion to help with running tests in a loop.
 /// </summary>
@@ -6,7 +10,6 @@ namespace MSTest.RepeatAttributes
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Validation;
@@ -28,8 +31,7 @@ namespace MSTest.RepeatAttributes
         {
             string numberofiterations = Environment.GetEnvironmentVariable("NumberofIterations", EnvironmentVariableTarget.User);
 
-            uint iterations;
-            if (string.IsNullOrEmpty(numberofiterations) || !uint.TryParse(numberofiterations, out iterations))
+            if (string.IsNullOrEmpty(numberofiterations) || !uint.TryParse(numberofiterations, out uint iterations))
             {
                 this.Iterations = 1;
             }
@@ -74,11 +76,6 @@ namespace MSTest.RepeatAttributes
         {
             Requires.NotNull(testMethod, nameof(testMethod));
 
-#if NET472
-            Trace.Listeners.Add(new ConsoleTraceListener());
-
-            Trace.WriteLine($"Executing test {testMethod.TestMethodName} for {this.Iterations} iterations.");
-#endif
             List<TestResult> testresults = new List<TestResult>();
             foreach (int iteration in Enumerable.Range(0, (int)this.Iterations))
             {
@@ -91,9 +88,6 @@ namespace MSTest.RepeatAttributes
                         continue;
                     }
 
-#if NET472
-                    Trace.WriteLine($"Executing test {testMethod.TestMethodName} in iteration: {CurrentIteration}.");
-#endif
                     if (this.Iterations > 1)
                     {
                         temptestresult.DisplayName = $"{testMethod.TestMethodName}(iteration: {CurrentIteration})";

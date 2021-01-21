@@ -53,3 +53,9 @@ steps:
     PathtoPublish: '.\Bin\Release\AnyCPU'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '.\publish\Bin\Release\AnyCPU'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
