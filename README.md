@@ -1,10 +1,10 @@
-# MSTest.Repeat
+# MSTestRepeat
 
 ## Summary
 If you have written an integration test using MSTest, and are looking for an easy and efficent way to run tests in a loop (stress/performance), running tests either locally or in Azure Pipelines or plan to do so soon, you can now with a small change. Enable your tests to run in a loop in Azure Pipelines or on your local machine without having to write loops in your tests! 
 
 ## How to
-Add a reference to MSTest.Repeat nuget package in your test solution. Set the Windows environment variable NumberofIterations to the number of iterations you want the test to run. If this variable is not set, the behavior even when the attributes are added will remain the same as it is today, i.e. run the test without a loop.
+Add a reference to MSTestRepeat nuget package in your test solution. Set the Windows environment variable NumberofIterations to the number of iterations you want the test to run. If this variable is not set, the behavior even when the attributes are added will remain the same as it is today, i.e. run the test without a loop.
 
 
 ### Add RepeatTestMethod Attribute to use with MSTest
@@ -28,12 +28,31 @@ to
 ```
 
 ## My code is ready, what's next.
-Now if you are ready to run your test in a loop, from a command line window, run the following command 
+Now if you are ready to run your test in a loop follow the instructions below based on where you are executing the tests.
+
+### Setup in Azure Release pipeline
+In the stage that runs the tests with the MSTest.Repeat attribute, before the VSTest task, do the following 
+1. Add a new PowerShell task
+2. Set the Type of the task as Inline
+3. Add the following powershell command to set the NumberofInterations variable to the desired iteration count.
+
+```ps
+    [System.Environment]::SetEnvironmentVariable("NumberofIterations", n, [System.EnvironmentVariableTarget]::User)
+```
+where n is an integer value representing the number of iterations you want to run tests on. 
+
+![Set NumberofIterations environment variable](docs/AzReleasePipeline-setiterations.png)
+
+In Azure Release Pipelines, we also have the additional option of setting a Pipeline variable and using that variable in the command here, allowing for one variable to define the number of iterations to execute tests across the Release. Users then can set the variable explicitly to kick off a manual release automation run.
+
+### Setup on local machine.
+Open a a command line window and run the following command 
 
 ```cmd
     setx NumberofIterations n
 ```
 where n is an integer value representing the number of iterations you want to run tests on. 
+
 
 ## Benefit
 Many take the approach of running a test multiple times by making a copy of an existing test and putting it in a for loop. In some cases that might be ok, but look closely at your test implementation. Do you have a TestInitialize or ClassInitialize implementation and possibly a corresponding Cleanup implementation as well. If yes then using the Attribute is a more accurate representation of how the code should function than the test would behave under a simple loop. In the simple loop implementation, the initialization and cleanup only happens once with the loop happening n times, when we want to be testing the initialization, the functionality and the cleanup all in a loop.
