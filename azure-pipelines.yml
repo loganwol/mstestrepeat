@@ -3,9 +3,6 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
-trigger:
-- main
-
 pool:
   vmImage: 'windows-latest'
 
@@ -25,20 +22,34 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: VSBuild@1
+- task: UseDotNet@2
   inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    version: '5.0.x'
+    includePreviewVersions: true
+  displayName: 'Install .net 5.0.x'
 
-- task: VSTest@2
+- task: UseDotNet@2
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    testSelector: testAssemblies
-    testAssemblyVer2: | 
-      **\*test.unit*.dll
-      !**\*TestAdapter.dll
-      !**\obj\** 
-    codeCoverageEnabled: true
-    runSettingsFile: CodeCoverage.runsettings
+    version: '3.x'
+    packageType: runtime
+  displayName: 'Install .net core 3.x'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
+  displayName: 'dotnet build $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: '**/*Test.Unit.csproj'
+    publishTestResults: true
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings:CodeCoverage.runsettings'
+  displayName: 'Run unit tests'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '.\Bin\Release\AnyCPU'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

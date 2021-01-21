@@ -5,6 +5,8 @@
     <IsPackable>false</IsPackable>
     <RootNamespace>MSTest.RepeatAttributes.Test.Integration</RootNamespace>
     <IsTestProject>true</IsTestProject>
+    <NeutralLanguage>English</NeutralLanguage>
+    <OutputPath>$(SolutionDir)bin\$(Configuration)\$(Platform)\$(AssemblyName)</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
