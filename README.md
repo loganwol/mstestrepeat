@@ -3,9 +3,9 @@
 ## Summary
 If you have written an integration test using MSTest, and are looking for an easy and efficent way to run tests in a loop (stress/performance), running tests either locally or in Azure Pipelines or plan to do so soon, you can now with a small change. Enable your tests to run in a loop in Azure Pipelines or on your local machine without having to write loops in your tests! 
 
-## Build Status
+## Status
 
-[![Build Status](https://dev.azure.com/TestRunResultReporter/AzureTRR/_apis/build/status/loganwol.mstestrepeat?branchName=master)](https://dev.azure.com/TestRunResultReporter/AzureTRR/_build/latest?definitionId=2&branchName=master)
+[Build Status](https://dev.azure.com/TestRunResultReporter/AzureTRR/_apis/build/status/loganwol.mstestrepeat?branchName=master)]
 
 ![Nuget Package](https://img.shields.io/nuget/v/MSTestRepeat)
 
