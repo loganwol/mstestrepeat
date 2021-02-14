@@ -165,4 +165,4 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)\drop'
           displayName: 'PowerShell Script'
           env:
-            system_accesstoken: $(System.AccessToken)
+            SYSTEM_ACCESSTOKEN: $(System.AccessToken)
