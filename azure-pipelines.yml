@@ -22,142 +22,142 @@ name: $(major).$(minor)$(Rev:.r)
 
 stages:
   - stage: Build_RunUnitTests_Publish
-  displayName: "Build, Run Unit Tests and PublishBuildArtifacts"
-  jobs:
-    - job: Build
-      pool:
-      vmImage: 'windows-latest'
-      variables:
-        buildConfiguration: 'Release' 
-      continueOnError: false
+    displayName: "Build, Run Unit Tests and PublishBuildArtifacts"
+    jobs:
+      - job: Build
+        pool:
+        vmImage: 'windows-latest'
+        variables:
+          buildConfiguration: 'Release' 
+        continueOnError: false
 
-      steps:
-      - task: NuGetToolInstaller@1
+        steps:
+        - task: NuGetToolInstaller@1
 
-      - task: NuGetCommand@2
-        inputs:
-          restoreSolution: '$(solution)'
+        - task: NuGetCommand@2
+          inputs:
+            restoreSolution: '$(solution)'
 
-      - task: UseDotNet@2
-        inputs:
-          version: '5.0.x'
-          includePreviewVersions: true
-        displayName: 'Install .net 5.0.x'
+        - task: UseDotNet@2
+          inputs:
+            version: '5.0.x'
+            includePreviewVersions: true
+          displayName: 'Install .net 5.0.x'
 
-      - task: UseDotNet@2
-        inputs:
-          version: '3.x'
-          packageType: runtime
-        displayName: 'Install .net core 3.x'
+        - task: UseDotNet@2
+          inputs:
+            version: '3.x'
+            packageType: runtime
+          displayName: 'Install .net core 3.x'
 
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: 'build'
-          arguments: '--configuration $(buildConfiguration)'
-        displayName: 'dotnet build $(buildConfiguration)'
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: 'build'
+            arguments: '--configuration $(buildConfiguration)'
+          displayName: 'dotnet build $(buildConfiguration)'
 
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: test
-          projects: '**/*Test.Unit.csproj'
-          publishTestResults: true
-          arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings:CodeCoverage.runsettings'
-        displayName: 'Run unit tests'
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: test
+            projects: '**/*Test.Unit.csproj'
+            publishTestResults: true
+            arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings:CodeCoverage.runsettings'
+          displayName: 'Run unit tests'
 
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '.\Bin\Release\AnyCPU'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '.\Bin\Release\AnyCPU'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
 
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '.\publish\Bin\Release\AnyCPU'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '.\publish\Bin\Release\AnyCPU'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
 
   - stage: "IntegrationTests"
-  displayName: "Interation Tests"
+    displayName: "Interation Tests"
 
-  jobs: 
-    - job: "RunMultipleTests"
-      displayName: "Run Multiple Tests"
-      pool:
-        name: 'Azure Pipelines'
-        vmImage: $(vmImageName)
-        demands: VSTest
+    jobs: 
+      - job: "RunMultipleTests"
+        displayName: "Run Multiple Tests"
+        pool:
+          name: 'Azure Pipelines'
+          vmImage: $(vmImageName)
+          demands: VSTest
 
-      steps:
-      - task: DownloadBuildArtifacts@0
-        displayName: 'Download Build Artifacts'
-        inputs:
-          buildType: specific
-          project: 'MSTestRepeat'
-          pipeline: 1
-          specificBuildWithTriggering: true
-          downloadType: specific
-          downloadPath: '$(System.DefaultWorkingDirectory)'
+        steps:
+        - task: DownloadBuildArtifacts@0
+          displayName: 'Download Build Artifacts'
+          inputs:
+            buildType: specific
+            project: 'MSTestRepeat'
+            pipeline: 1
+            specificBuildWithTriggering: true
+            downloadType: specific
+            downloadPath: '$(System.DefaultWorkingDirectory)'
 
-      - powershell: |
-         # Set the number of iterations environment variable
-         
-         [System.Environment]::SetEnvironmentVariable('NumberofIterations',"20", "User")
-         
-        displayName: 'Set Number of iterations'
+        - powershell: |
+           # Set the number of iterations environment variable
+           
+           [System.Environment]::SetEnvironmentVariable('NumberofIterations',"20", "User")
+           
+          displayName: 'Set Number of iterations'
 
-      - task: VSTest@2
-        displayName: 'Run Tests with iterations'
-        inputs:
-          testAssemblyVer2: |
-           **\*Test.Integration*.dll
-           !**\*TestAdapter.dll
-           !**\obj\**
-          codeCoverageEnabled: true
-          testRunTitle: RunwithRepeat
-      
-      - powershell: |
-         # Set the number of iterations environment variable
-         
-         [System.Environment]::SetEnvironmentVariable('NumberofIterations',"", "User")
-         
-        displayName: 'Reset Number of iterations'
+        - task: VSTest@2
+          displayName: 'Run Tests with iterations'
+          inputs:
+            testAssemblyVer2: |
+             **\*Test.Integration*.dll
+             !**\*TestAdapter.dll
+             !**\obj\**
+            codeCoverageEnabled: true
+            testRunTitle: RunwithRepeat
+        
+        - powershell: |
+           # Set the number of iterations environment variable
+           
+           [System.Environment]::SetEnvironmentVariable('NumberofIterations',"", "User")
+           
+          displayName: 'Reset Number of iterations'
 
-      - task: VSTest@2
-        displayName: 'Run Tests with no iterations'
-        inputs:
-          testAssemblyVer2: |
-           **\*Test.Integration*.dll
-           !**\*TestAdapter.dll
-           !**\obj\**
-          codeCoverageEnabled: true
-          testRunTitle: RunwithNoRepeat
+        - task: VSTest@2
+          displayName: 'Run Tests with no iterations'
+          inputs:
+            testAssemblyVer2: |
+             **\*Test.Integration*.dll
+             !**\*TestAdapter.dll
+             !**\obj\**
+            codeCoverageEnabled: true
+            testRunTitle: RunwithNoRepeat
 
-    - job: GenerateBuildReport
-      displayName: "Generate Build Report"
-      pool:
-        name: 'Azure Pipelines'
-        vmImage: $(vmImageName)
-      
-      steps:
-      - task: DownloadBuildArtifacts@0
-        displayName: 'Download Build Artifacts'
-        inputs:
-          buildType: specific
-          project: 'e8c0d705-6817-4252-acb1-5ec8ad488166'
-          pipeline: 2
-          downloadType: specific
-          itemPattern: |
-           **
-           !AzTestReporter.BuildRelease.Apis/**
-           !AzTestReporter.BuildRelease.Apis.Test.Unit/**
-           !AzTestReporter.BuildRelease.Builder/**
-           !AzTestReporter.BuildRelease.Builder.Test.Unit/**
-           !AzTestReporter.TestContent/**
-          downloadPath: '$(System.DefaultWorkingDirectory)'
+      - job: GenerateBuildReport
+        displayName: "Generate Build Report"
+        pool:
+          name: 'Azure Pipelines'
+          vmImage: $(vmImageName)
+        
+        steps:
+        - task: DownloadBuildArtifacts@0
+          displayName: 'Download Build Artifacts'
+          inputs:
+            buildType: specific
+            project: 'e8c0d705-6817-4252-acb1-5ec8ad488166'
+            pipeline: 2
+            downloadType: specific
+            itemPattern: |
+             **
+             !AzTestReporter.BuildRelease.Apis/**
+             !AzTestReporter.BuildRelease.Apis.Test.Unit/**
+             !AzTestReporter.BuildRelease.Builder/**
+             !AzTestReporter.BuildRelease.Builder.Test.Unit/**
+             !AzTestReporter.TestContent/**
+            downloadPath: '$(System.DefaultWorkingDirectory)'
 
-      - powershell: |
-         Write-Host "Generate report"
-         
-         $(System.DefaultWorkingDirectory)\drop\AzTestReporter.App.exe --trt Integration --sendmail false
-        workingDirectory: '$(System.DefaultWorkingDirectory)\drop'
-        displayName: 'PowerShell Script'
+        - powershell: |
+           Write-Host "Generate report"
+           
+           $(System.DefaultWorkingDirectory)\drop\AzTestReporter.App.exe --trt Integration --sendmail false
+          workingDirectory: '$(System.DefaultWorkingDirectory)\drop'
+          displayName: 'PowerShell Script'
