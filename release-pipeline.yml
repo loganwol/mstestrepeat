@@ -5,7 +5,6 @@ trigger:
 resources:
   pipelines:
   - pipeline: MSTestRepeatMerged  # Name of the pipeline resource
-    displayName: "MSTestRepeat from Build"
     source: loganwol.mstestrepeat # Name of the triggering pipeline
     trigger: 
       branches:
