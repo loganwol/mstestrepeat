@@ -25,8 +25,8 @@ stages:
     displayName: "Build, Run Unit Tests and PublishBuildArtifacts"
     jobs:
       - job: Build
-        pool:
-        vmImage: 'windows-latest'
+        pool: 
+          vmImage: 'windows-latest'
         variables:
           buildConfiguration: 'Release' 
         continueOnError: false
