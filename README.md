@@ -5,7 +5,10 @@ If you have written an integration test using MSTest, and are looking for an eas
 
 ## Status
 
-![Build](https://img.shields.io/azure-devops/build/HermesProjects/fa9272c0-de24-4c86-96a6-78706bcfed30/1)
+![Build Status](https://img.shields.io/azure-devops/build/HermesProjects/fa9272c0-de24-4c86-96a6-78706bcfed30/1)
+![Test Status](https://img.shields.io/azure-devops/tests/HermesProjects/MSTestRepeat/1)
+![Code Coverage](https://img.shields.io/azure-devops/coverage/HermesProjects/MSTestRepeat/1)
+
 ![Nuget Package](https://img.shields.io/nuget/v/MSTestRepeat)
 
 [View Release Pipeline for usage example](https://dev.azure.com/HermesProjects/MSTestRepeat/_release?definitionId=1&view=mine&_a=releases)
