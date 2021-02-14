@@ -21,7 +21,7 @@ stages:
     - job: "RunMultipleTests"
       displayName: "Run Multiple Tests"
       pool:
-        name: 'Azure - SW Build VS2019 Agents'
+        name: 'Azure Pipelines'
         vmImage: $(vmImageName)
         demands: VSTest
 
@@ -73,7 +73,7 @@ stages:
     - job: GenerateBuildReport
       displayName: "Generate Build Report"
       pool:
-        name: 'Azure - SW Build VS2019 Agents'
+        name: 'Azure Pipelines'
         vmImage: $(vmImageName)
       
       steps:
