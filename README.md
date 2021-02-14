@@ -8,6 +8,8 @@ If you have written an integration test using MSTest, and are looking for an eas
 ![Build](https://img.shields.io/azure-devops/build/HermesProjects/fa9272c0-de24-4c86-96a6-78706bcfed30/1)
 ![Nuget Package](https://img.shields.io/nuget/v/MSTestRepeat)
 
+[View Release Pipeline for usage example](https://dev.azure.com/HermesProjects/MSTestRepeat/_release?definitionId=1&view=mine&_a=releases)
+
 
 ## How to
 Add a reference to MSTestRepeat nuget package in your test solution. Set the Windows environment variable NumberofIterations to the number of iterations you want the test to run. If this variable is not set, the behavior even when the attributes are added will remain the same as it is today, i.e. run the test without a loop.
