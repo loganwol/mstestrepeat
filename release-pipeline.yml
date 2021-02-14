@@ -1,0 +1,102 @@
+# Explicitly set none for repositry trigger
+trigger:
+- none
+
+resources:
+  pipelines:
+  - pipeline: MSTestRepeatMerged  # Name of the pipeline resource
+    displayName: "MSTestRepeat from Build"
+    source: loganwol.mstestrepeat # Name of the triggering pipeline
+    trigger: 
+      branches:
+      - main
+
+variables:
+  vmImageName: 'vs2017-win2016'
+
+stages:
+- stage: "IntegrationTests"
+  displayName: "Interation Tests"
+
+  jobs: 
+    - job: "RunMultipleTests"
+      displayName: "Run Multiple Tests"
+      pool:
+        name: 'Azure - SW Build VS2019 Agents'
+        vmImage: $(vmImageName)
+        demands: VSTest
+
+      steps:
+      - task: DownloadBuildArtifacts@0
+        displayName: 'Download Build Artifacts'
+        inputs:
+          buildType: specific
+          project: 'MSTestRepeat'
+          pipeline: 1
+          specificBuildWithTriggering: true
+          downloadType: specific
+          downloadPath: '$(System.DefaultWorkingDirectory)'
+
+      - powershell: |
+         # Set the number of iterations environment variable
+         
+         [System.Environment]::SetEnvironmentVariable('NumberofIterations',"20", "User")
+         
+        displayName: 'Set Number of iterations'
+
+      - task: VSTest@2
+        displayName: 'Run Tests with iterations'
+        inputs:
+          testAssemblyVer2: |
+           **\*Test.Integration*.dll
+           !**\*TestAdapter.dll
+           !**\obj\**
+          codeCoverageEnabled: true
+          testRunTitle: RunwithRepeat
+      
+      - powershell: |
+         # Set the number of iterations environment variable
+         
+         [System.Environment]::SetEnvironmentVariable('NumberofIterations',"", "User")
+         
+        displayName: 'Reset Number of iterations'
+
+      - task: VSTest@2
+        displayName: 'Run Tests with no iterations'
+        inputs:
+          testAssemblyVer2: |
+           **\*Test.Integration*.dll
+           !**\*TestAdapter.dll
+           !**\obj\**
+          codeCoverageEnabled: true
+          testRunTitle: RunwithNoRepeat
+
+    - job: GenerateBuildReport
+      displayName: "Generate Build Report"
+      pool:
+        name: 'Azure - SW Build VS2019 Agents'
+        vmImage: $(vmImageName)
+      
+      steps:
+      - task: DownloadBuildArtifacts@0
+        displayName: 'Download Build Artifacts'
+        inputs:
+          buildType: specific
+          project: 'e8c0d705-6817-4252-acb1-5ec8ad488166'
+          pipeline: 2
+          downloadType: specific
+          itemPattern: |
+           **
+           !AzTestReporter.BuildRelease.Apis/**
+           !AzTestReporter.BuildRelease.Apis.Test.Unit/**
+           !AzTestReporter.BuildRelease.Builder/**
+           !AzTestReporter.BuildRelease.Builder.Test.Unit/**
+           !AzTestReporter.TestContent/**
+          downloadPath: '$(System.DefaultWorkingDirectory)'
+
+      - powershell: |
+         Write-Host "Generate report"
+         
+         $(System.DefaultWorkingDirectory)\drop\AzTestReporter.App.exe --trt Integration --sendmail false
+        workingDirectory: '$(System.DefaultWorkingDirectory)\drop'
+        displayName: 'PowerShell Script'

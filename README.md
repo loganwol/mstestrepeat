@@ -5,8 +5,7 @@ If you have written an integration test using MSTest, and are looking for an eas
 
 ## Status
 
-![Build Status](https://dev.azure.com/TestRunResultReporter/AzureTRR/_apis/build/status/loganwol.mstestrepeat?branchName=master)
-
+![Build](https://img.shields.io/azure-devops/build/HermesProjects/fa9272c0-de24-4c86-96a6-78706bcfed30/1)
 ![Nuget Package](https://img.shields.io/nuget/v/MSTestRepeat)
 
 
