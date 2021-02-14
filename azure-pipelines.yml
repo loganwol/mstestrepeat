@@ -57,6 +57,7 @@ stages:
           displayName: 'dotnet build $(buildConfiguration)'
 
         - task: DotNetCoreCLI@2
+          condition: succeededOrFailed()
           inputs:
             command: test
             projects: '**/*Test.Unit.csproj'
@@ -77,7 +78,7 @@ stages:
             publishLocation: 'Container'
 
   - stage: "IntegrationTests"
-    displayName: "Interation Tests"
+    displayName: "Integration Tests"
 
     jobs: 
       - job: "RunMultipleTests"
@@ -133,6 +134,8 @@ stages:
             testRunTitle: RunwithNoRepeat
 
       - job: GenerateBuildReport
+        dependsOn: RunMultipleTests
+        condition: 
         displayName: "Generate Build Report"
         pool:
           name: 'Azure Pipelines'
@@ -161,3 +164,5 @@ stages:
            $(System.DefaultWorkingDirectory)\drop\AzTestReporter.App.exe --trt Integration --sendmail false
           workingDirectory: '$(System.DefaultWorkingDirectory)\drop'
           displayName: 'PowerShell Script'
+          env:
+            system_accesstoken: $(System.AccessToken)
